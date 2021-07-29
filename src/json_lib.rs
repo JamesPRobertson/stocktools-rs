@@ -18,6 +18,8 @@ const DATA_CLOSE_KEY: &str = "4. close";
 const GREEN_BLOCK: &str = "\x1b[92;1m▮\x1b[31;0m";
 const RED_BLOCK: &str = "\x1b[91;1m▮\x1b[31;0m";
 
+/// Values to be pulled out of the JSON's data
+/// and are needed to correctly display the graph
 struct JsonValues{
     highest:     f64,
     lowest:      f64,
@@ -25,11 +27,31 @@ struct JsonValues{
     price_tiers: [f64; 10],
 }
 
+
+/// Get JSON from String
+///     Given a String input, this function returns a serde_json::Value
+///     built from the supplied String.
+///
+/// Args:
+///     input (String): Stringified JSON object to be parsed.
+///
+/// Returns:
+///     serde_json::Result<T>: a JSON object
+///
 pub fn get_json_from_string(input: String) -> Result<Value>{
-    let stonks: Result<Value> = serde_json::from_str(&input);
-    return stonks;
+    return serde_json::from_str(&input);
 }
 
+/// Get JSON from file
+///     Given a &str file path, this function returns a serde_json::Value
+///     built from what is found in the file.
+///
+/// Args:
+///     file_path (String): File path to a JSON file.
+///
+/// Returns:
+///     serde_json::Result<T>: a JSON object
+///
 pub fn _get_json_from_file(file_path: &str) -> Result<Value>{
     let mut file = File::open(file_path).unwrap();
     let mut file_contents: String = String::new();
@@ -39,12 +61,31 @@ pub fn _get_json_from_file(file_path: &str) -> Result<Value>{
     return stonks;
 }
 
+/// Display JSON
+///     Given a reference to a serde_json::Value, this function
+///     will pretty print the JSON object using the serde_json function.
+///
+/// Args:
+///     json_obj (&Value): a serde_json::Value to be printed.
+///
+/// Returns:
+///     None
+///
 pub fn _display_json(json_obj: &Value) -> (){
     let display_string: String = serde_json::to_string_pretty(json_obj).unwrap();
     println!("{}", display_string);
 }
 
-
+/// Generate Graph
+///     Creates and displays a graph showing a ticker's
+///     intraday movement.
+///
+/// Args:
+///     json_obj (&Value): the JSON object to be parsed
+///
+/// Returns:
+///     None
+///
 pub fn generate_graph(json_obj: &Value) -> () {
     let mut counter = 0;
     let mut previous_close: f64 = 0 as f64;
@@ -53,8 +94,6 @@ pub fn generate_graph(json_obj: &Value) -> () {
     
     let data_values = get_data(json_obj);
 
-    //This will stay the same, we just have to change length to struct::num_elements
-    //let mut str_arr: [[&str; data_values.num_elems]; 9] = [[" "; data_values.num_elems]; 9];
     let mut str_arr = vec![vec![" "; data_values.num_elems]; 10];
 
     for (_time, dict) in json_obj[DATA_TIME_KEY].as_object().unwrap(){
@@ -81,23 +120,11 @@ pub fn generate_graph(json_obj: &Value) -> () {
                 break;
             }
         }
-
-        // This is to print out the flat line
-        /*
-        if _open_num <= close_num{
-            print!("{}{}{}", _C_GREEN, _block, _C_WHITE);
-        }
-        else{
-            print!("{}{}{}", _C_RED, _block, _C_WHITE);
-        }
-        */
-
         counter = counter + 1;
         previous_close = close_num;
     }
 
     println!("\n{}", data_values.highest);
-
     for i in 0..str_arr.len(){
         print!("|");
         for j in 0..str_arr[i].len(){
@@ -105,12 +132,21 @@ pub fn generate_graph(json_obj: &Value) -> () {
         }
         println!("");
     }
-    println!("{}", "―".repeat(79));
+    println!("{}", "―".repeat(data_values.num_elems));
     println!("{}", data_values.lowest);
-    println!("\nThere are {} entries", counter);
-    println!("Highest: {}, lowest: {}", data_values.highest, data_values.lowest);
 }
 
+/// Determine Price Tiers
+///     Returns an array of f64 that are evenly divided
+///     into 10 elements
+///
+/// Args:
+///     highest (f64): the greatest number encountered
+///     lowest  (f64): the lowest number encountered
+///
+/// Returns:
+///     [f64; 10]: an array of 10 evenly spaced numbers
+///
 fn determine_price_tiers(highest: f64, lowest: f64) -> [f64; 10]{
     let mut tiers: [f64; 10] = [0 as f64; 10];
     let difference: f64 = highest - lowest;
@@ -123,6 +159,16 @@ fn determine_price_tiers(highest: f64, lowest: f64) -> [f64; 10]{
     return tiers;
 }
 
+/// Get Data
+///     Creates a JsonValues struct from a supplied
+///     JSON object
+///
+/// Args:
+///     json_obj (&Value): the JSON to be parsed
+///
+/// Returns:
+///     JsonValues struct
+///
 fn get_data(json_obj: &Value) -> JsonValues {
     let mut cur_highest: f64 = 0 as f64;
     let mut cur_lowest: f64 = f64::MAX;
@@ -154,3 +200,4 @@ fn get_data(json_obj: &Value) -> JsonValues {
 
     return data_values;
 }
+

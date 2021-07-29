@@ -5,6 +5,16 @@ extern crate reqwest;
 use std::io::prelude::*;
 use std::fs::File;
 
+/// Get JSON
+///     Uses reqwest to call Alphavantage's API with the given
+///     argument to determine the ticker.
+///
+/// Args:
+///     ticker (&str): the stock ticker desired e.g. GME, IBM
+///
+/// Returns:
+///     reqwest::blocking::Response to be Stringified
+///
 pub fn get_json(ticker: &str) -> Result<reqwest::blocking::Response, ()>{
     let mut api_file = File::open("./alpha_vantage_key").unwrap();
     let mut api_key: String = String::new();
@@ -16,8 +26,3 @@ pub fn get_json(ticker: &str) -> Result<reqwest::blocking::Response, ()>{
     Ok(response)
 }
 
-/*
-pub fn run(url:&str) -> Result<reqwest::blocking::Response, reqwest::Error>{
-   return Ok(reqwest::blocking::get(url)?);
-}
-*/
