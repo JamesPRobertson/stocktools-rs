@@ -8,6 +8,4 @@ authors = ["James Robertson"]
 
 [dependencies]
 reqwest = { version = "*", features = ["blocking", "json"]}
-serde = { version = "*", features = ["derive"] }
 serde_json = { version = "*" }
-tokio = { version = "*" }
