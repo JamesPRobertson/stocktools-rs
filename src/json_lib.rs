@@ -71,7 +71,7 @@ pub fn _get_json_from_file(file_path: &str) -> Result<Value>{
 /// Returns:
 ///     None
 ///
-pub fn _display_json(json_obj: &Value) -> (){
+pub fn _display_json(json_obj: &Value){
     let display_string: String = serde_json::to_string_pretty(json_obj).unwrap();
     println!("{}", display_string);
 }
@@ -86,7 +86,7 @@ pub fn _display_json(json_obj: &Value) -> (){
 /// Returns:
 ///     None
 ///
-pub fn generate_graph(json_obj: &Value) -> () {
+pub fn generate_graph(json_obj: &Value){
     let mut counter = 0;
     let mut previous_close: f64 = 0 as f64;
 
@@ -120,7 +120,7 @@ pub fn generate_graph(json_obj: &Value) -> () {
                 break;
             }
         }
-        counter = counter + 1;
+        counter += 1;
         previous_close = close_num;
     }
 
@@ -130,7 +130,7 @@ pub fn generate_graph(json_obj: &Value) -> () {
         for j in 0..str_arr[i].len(){
             print!("{}", str_arr[i][j]);
         }
-        println!("");
+        println!();
     }
     println!("{}", "―".repeat(data_values.num_elems));
     println!("{}", data_values.lowest);
@@ -188,7 +188,7 @@ fn get_data(json_obj: &Value) -> JsonValues {
             cur_lowest = close_num;
         }
 
-        count = count + 1;
+        count += 1;
     }
 
     let data_values = JsonValues{

@@ -9,3 +9,4 @@ authors = ["James Robertson"]
 [dependencies]
 reqwest = { version = "*", features = ["blocking", "json"]}
 serde_json = { version = "*" }
+termion = { version = "*" }
