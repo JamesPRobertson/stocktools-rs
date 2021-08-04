@@ -33,6 +33,7 @@ General improvments to the graph.
 - Configurable height and width of the graph.
 - Historical data - given a date in the past
 
+# TODO: PLEASE UPDATE THIS
 ### Stockline
 A single line that updates with the security's movement up to 5 times per minute!
 - Multiline version that tracks multiple securities.
