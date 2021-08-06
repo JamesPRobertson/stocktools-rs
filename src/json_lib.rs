@@ -5,12 +5,8 @@ use std::io::prelude::*;
 use std::fs::File;
 use serde_json::{Result, Value};
 
-const _C_RED:&str    = "\x1b[91;1m";
-const _C_GREEN:&str  = "\x1b[92;1m";
-const _C_YELLOW:&str = "\x1b[93;1m";
-const _C_BLUE:&str   = "\x1b[34;1m";
-const _C_WHITE:&str  = "\x1b[31;0m";
-
+const _META_MAIN_KEY:  &str = "Meta Data";
+const _META_RFSH_KEY:  &str = "3. Last Refreshed";
 const DATA_TIME_KEY:  &str = "Time Series (5min)";
 const DATA_OPEN_KEY:  &str = "1. open";
 const DATA_CLOSE_KEY: &str = "4. close";
@@ -71,9 +67,24 @@ pub fn _get_json_from_file(file_path: &str) -> Result<Value>{
 /// Returns:
 ///     None
 ///
-pub fn _display_json(json_obj: &Value) -> (){
+pub fn _display_json(json_obj: &Value){
     let display_string: String = serde_json::to_string_pretty(json_obj).unwrap();
     println!("{}", display_string);
+}
+
+/// Get Most Recent Entry
+///     Returns the most recent entry from the Time Series dict.
+///     This is found by using the meta data within the file.
+///
+/// Args:
+///     json (&Value): a serde_json::Value to be parsed
+///
+/// Returns:
+///     (&Value): The most recent entry
+///
+pub fn _get_most_recent_entry(json: &Value) -> &serde_json::Value{
+    let most_recent_key: &str = json[_META_MAIN_KEY][_META_RFSH_KEY].as_str().unwrap();
+    return &json[DATA_TIME_KEY][most_recent_key];
 }
 
 /// Generate Graph
@@ -86,7 +97,7 @@ pub fn _display_json(json_obj: &Value) -> (){
 /// Returns:
 ///     None
 ///
-pub fn generate_graph(json_obj: &Value) -> () {
+pub fn generate_graph(json_obj: &Value){
     let mut counter = 0;
     let mut previous_close: f64 = 0 as f64;
 
@@ -120,7 +131,7 @@ pub fn generate_graph(json_obj: &Value) -> () {
                 break;
             }
         }
-        counter = counter + 1;
+        counter += 1;
         previous_close = close_num;
     }
 
@@ -130,7 +141,7 @@ pub fn generate_graph(json_obj: &Value) -> () {
         for j in 0..str_arr[i].len(){
             print!("{}", str_arr[i][j]);
         }
-        println!("");
+        println!();
     }
     println!("{}", "―".repeat(data_values.num_elems));
     println!("{}", data_values.lowest);
@@ -188,7 +199,7 @@ fn get_data(json_obj: &Value) -> JsonValues {
             cur_lowest = close_num;
         }
 
-        count = count + 1;
+        count += 1;
     }
 
     let data_values = JsonValues{
