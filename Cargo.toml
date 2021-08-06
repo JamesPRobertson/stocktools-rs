@@ -10,3 +10,4 @@ authors = ["James Robertson"]
 reqwest = { version = "*", features = ["blocking", "json"]}
 serde_json = { version = "*" }
 termion = { version = "*" }
+rand = { version="*" }

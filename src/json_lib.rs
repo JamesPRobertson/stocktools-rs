@@ -5,8 +5,8 @@ use std::io::prelude::*;
 use std::fs::File;
 use serde_json::{Result, Value};
 
-const META_MAIN_KEY:  &str = "Meta Data";
-const META_RFSH_KEY:  &str = "3. Last Refreshed";
+const _META_MAIN_KEY:  &str = "Meta Data";
+const _META_RFSH_KEY:  &str = "3. Last Refreshed";
 const DATA_TIME_KEY:  &str = "Time Series (5min)";
 const DATA_OPEN_KEY:  &str = "1. open";
 const DATA_CLOSE_KEY: &str = "4. close";
@@ -82,8 +82,8 @@ pub fn _display_json(json_obj: &Value){
 /// Returns:
 ///     (&Value): The most recent entry
 ///
-pub fn get_most_recent_entry(json: &Value) -> &serde_json::Value{
-    let most_recent_key: &str = json[META_MAIN_KEY][META_RFSH_KEY].as_str().unwrap();
+pub fn _get_most_recent_entry(json: &Value) -> &serde_json::Value{
+    let most_recent_key: &str = json[_META_MAIN_KEY][_META_RFSH_KEY].as_str().unwrap();
     return &json[DATA_TIME_KEY][most_recent_key];
 }
 
