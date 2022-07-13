@@ -11,8 +11,8 @@ const DATA_TIME_KEY:  &str = "Time Series (5min)";
 const DATA_OPEN_KEY:  &str = "1. open";
 const DATA_CLOSE_KEY: &str = "4. close";
 
-const GREEN_BLOCK: &str = "\x1b[92;1m▮\x1b[31;0m";
-const RED_BLOCK: &str = "\x1b[91;1m▮\x1b[31;0m";
+const GREEN_BLOCK: &str = "\x1b[92;1m█\x1b[31;0m";
+const RED_BLOCK: &str = "\x1b[91;1m█\x1b[31;0m";
 
 /// Values to be pulled out of the JSON's data
 /// and are needed to correctly display the graph
@@ -101,7 +101,7 @@ pub fn generate_graph(json_obj: &Value){
     let mut counter = 0;
     let mut previous_close: f64 = 0 as f64;
 
-    let block: &str = "▮";
+    let block: &str = "█";
     
     let data_values = get_data(json_obj);
 

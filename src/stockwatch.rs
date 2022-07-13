@@ -90,6 +90,17 @@ pub fn stockwatch_main(){
 
 // TODO: consider formatting the '-' correctly for 3 letter tickers
 //       to fit with 4 letter tickers nicely
+/// Print Header
+///     Prints the given ticker's information based on the position
+///     that is given.
+///
+/// Args:
+///     ticker    (&str): String of the ticker
+///     position (usize): Position for the header to be printed
+///                       this typically corresponds to the index
+///                       of the ticker in the Vec of TickerData
+/// Returns:
+///     None
 fn print_header(ticker: &str, position: usize){
     let vertical_offset: u16 = (position * 3) as u16;
 
@@ -101,6 +112,17 @@ fn print_header(ticker: &str, position: usize){
     println!("[{}]", " ".repeat(NUM_VALUES));
 }
 
+/// Push Data
+///     Pushes an appropriately colored square onto the given
+///     ticker's VecDeque
+///
+/// Args:
+///     &ticker (TickerData): Struct from where we get the VecDeque.
+///     current_num    (f64): Current price for the ticker.
+///
+/// Returns: 
+///      None
+///
 fn push_data(ticker: &mut TickerData, current_num: f64){
     if current_num < ticker.most_recent_value{
         ticker.values.push_front(format!("{}{}{}", color::Fg(color::Red),
@@ -125,7 +147,9 @@ fn _get_most_recent_close(ticker: &str) -> f64{
     return string_num.parse::<f64>().unwrap();
 }
 
-// Purely for testing purposes, please ignore
+/// Get Fake Close
+///     Purely for testing purposes, please ignore
+///     
 fn get_fake_close(ticker: &str) -> f64 {
     let mut rng = rand::thread_rng();
     
